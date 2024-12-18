@@ -18,7 +18,7 @@ export class Cosmetico extends Produto {
 
     public visualizar(): void {
         super.visualizar();
-        console.log("Fragrância");
+        console.log("Fragrância: " + this._fragrancia);
     }
 
 }

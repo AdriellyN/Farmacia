@@ -18,7 +18,7 @@ export class Medicamento extends Produto {
 
     public visualizar(): void {
         super.visualizar();
-        console.log("Genérico");
+        console.log("Genérico: " + this._generico);
     }
 
 }

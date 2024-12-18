@@ -58,11 +58,10 @@ export abstract class Produto {
         console.log("\n\n-----------------------------------------");
         console.log("              Dados do Produto           ");
         console.log("-----------------------------------------");
-        console.log(`Código de identificação (ID): ${this._id}`);
+        console.log(`Código do Produto (ID): ${this._id}`);
         console.log(`Nome do Produto: ${this._nome}`);
         console.log("Tipo: " + tipo);
-        console.log(`Preço: ${this._preco.toFixed(2)}`);
+        console.log(`Preço (R$): ${this._preco.toFixed(2)}`);
     }
-
 
 }

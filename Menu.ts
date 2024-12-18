@@ -2,19 +2,22 @@ import readlinesync = require("readline-sync");
 import { colors } from "./src/util/Colors";
 import { Produto } from "./src/model/Produto";
 import { ProdutoController } from "./src/controller/ProdutoController";
-import { read } from "fs";
 import { Medicamento } from "./src/model/Medicamento";
 import { Cosmetico } from "./src/model/Cosmetico";
+import { read } from "node:fs";
 
 export function main() {
 
-    // Instância da Classe ProdutoController
-    let produtos: ProdutoController = new ProdutoController();
-
     // Variáveis para execução dos métodos na Classe Menu
-    let opcao, numero, id, tipo, preco: number;
-    let nome: string;
-    const tipoProdutos = ['Generico', 'Fragrancia'];
+    let opcao, id, tipo, preco: number;
+    let nome, generico, fragrancia: string;
+    const tipoProdutos = ['Medicamento', 'Cosmetico'];
+
+    // Instância da Classe ProdutoController
+    const produtos = new ProdutoController();
+
+    produtos.criarProduto(new Medicamento(produtos.gerarId(), "Tylenol", 1, 42.00, "Paracetamol"))
+    produtos.criarProduto(new Medicamento(produtos.gerarId(), ":ok_hand:", 2, 3.00, "Sun"))
 
     while (true) {
         console.log(colors.bg.whitebright, colors.fg.cyanstrong);
@@ -54,14 +57,16 @@ export function main() {
                 preco = readlinesync.questionFloat();
 
                 console.log("Digite o Tipo do Produto: ");
-                tipo = readlinesync.keyInSelect(tipoProdutos, "", {cancel: false}) + 1;
+                tipo = readlinesync.keyInSelect(tipoProdutos, "", { cancel: false }) + 1;
 
                 switch (tipo) {
                     case 1:
-                        produtos.criarProduto(new Medicamento(produtos.gerarId(), nome, tipo, preco, tipoProdutos[1]));
+                        generico = readlinesync.question('Digite o Nome Generico do Produto: ');
+                        produtos.criarProduto(new Medicamento(produtos.gerarId(), nome, tipo, preco, generico));
                         break;
                     case 2:
-                        produtos.criarProduto(new Cosmetico(produtos.gerarId(), nome, tipo, preco, tipoProdutos[2]));
+                        fragrancia = readlinesync.question('Digite a Fragrancia do Produto: ');
+                        produtos.criarProduto(new Cosmetico(produtos.gerarId(), nome, tipo, preco, fragrancia));
                         break;
                 }
                 keyPress();
@@ -79,8 +84,8 @@ export function main() {
                     colors.reset);
 
                 console.log("ID do Produto: ");
-                numero = readlinesync.questionInt();
-                produtos.consultarProdutoPorId(numero);
+                id = readlinesync.questionInt();
+                produtos.consultarProdutoPorId(id);
                 keyPress();
                 break;
 
@@ -89,9 +94,9 @@ export function main() {
                 console.log(colors.fg.bluestrong, "\nAtualizar dados do Produto \n", colors.reset);
 
                 console.log("ID do Produto: ");
-                numero = readlinesync.questionInt();
+                id = readlinesync.questionInt();
 
-                let produto = produtos.buscarNoArray(numero);
+                let produto = produtos.buscarNoArray(id);
 
                 if (produto != null) {
 
@@ -102,13 +107,15 @@ export function main() {
                     preco = readlinesync.questionFloat();
 
                     tipo = produto.tipo;
-                    
+
                     switch (tipo) {
                         case 1:
-                            produtos.atualizarProduto(new Medicamento(numero, nome, tipo, preco, "generico"));
+                            generico = readlinesync.question('Digite o Nome Generico do Produto: ');
+                            produtos.atualizarProduto(new Medicamento(id, nome, tipo, preco, generico));
                             break;
                         case 2:
-                            produtos.atualizarProduto(new Cosmetico(numero, nome, tipo, preco, "fragrancia"));
+                            fragrancia = readlinesync.question('Digite a Fragrancia do Produto: ');
+                            produtos.atualizarProduto(new Cosmetico(id, nome, tipo, preco, fragrancia));
                             break;
                     }
                 }
@@ -118,8 +125,8 @@ export function main() {
             case 5:
                 console.log(colors.fg.bluestrong, "\nDeletar Produto \n", colors.reset);
                 console.log("Digite o ID do produto: ");
-                numero = readlinesync.questionInt();
-                produtos.deletarProduto(numero);
+                id = readlinesync.questionInt();
+                produtos.deletarProduto(id);
                 keyPress();
                 break;
 
